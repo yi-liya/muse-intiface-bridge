@@ -1,0 +1,47 @@
+name: Build ESP32 Firmware
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build all boards
+        run: |
+          cd PlatformIO
+          for env in esp32 esp32c3 esp32s3 seeed_xiao_esp32c3; do
+            echo "Building $env..."
+            pio run -e $env
+
+            cd .pio/build/$env
+            mv firmware.bin firmware-$env.bin
+            mv bootloader.bin bootloader-$env.bin
+            mv partitions.bin partitions-$env.bin
+            cd ../../../
+
+            mkdir -p firmware/$env
+            mv .pio/build/$env/firmware-$env.bin firmware/$env/
+            mv .pio/build/$env/bootloader-$env.bin firmware/$env/
+            mv .pio/build/$env/partitions-$env.bin firmware/$env/
+          done
+
+      - name: Package all firmware into ZIP
+        run: |
+          cd PlatformIO
+          zip -r LS-Buttplug-Firmware.zip firmware
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LS-Buttplug-Firmware
+          path: PlatformIO/LS-Buttplug-Firmware.zip

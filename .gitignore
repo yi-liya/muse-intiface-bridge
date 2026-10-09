@@ -1,0 +1,34 @@
+# ===== 逆向过程归档: 含蓝牙抓包(.cfa)、小程序解包、第三方固件镜像 =====
+# 这些是分析过程的中间产物, 且大部分属于第三方资产, 不应上传
+_archive/
+
+# ===== LS-Buttplug 原项目的 Web UI 与预编译固件 =====
+# docs/ 里是原作者打包好的前端页面和 .bin, 本项目用不到
+ls_buttplug_src/LS-Buttplug-main/docs/
+
+# ===== PlatformIO 构建产物 =====
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# 烧录时按设备号生成的临时 ini
+ls_buttplug_src/**/platformio-dev*.ini
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# ===== 编辑器 / 系统 =====
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ===== 本地日志 =====
+*.log
+bat_debug.log
